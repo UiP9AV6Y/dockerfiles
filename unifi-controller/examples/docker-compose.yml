@@ -1,0 +1,30 @@
+---
+
+version: '2.3'
+
+services:
+  webapp:
+    image: unifi-controller:latest
+    build: ..
+    ports:
+      - "8080:8080"
+      - "8443:8443"
+    depends_on:
+      - mongo
+    volumes:
+       - webapp-backups:/usr/lib/unifi/data/backup/autobackup
+    networks:
+      - unifi_controller
+  mongo:
+    image: mongo:latest
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - unifi_controller
+
+volumes:
+  webapp-backups:
+  mongo-data:
+
+networks:
+  unifi_controller:
