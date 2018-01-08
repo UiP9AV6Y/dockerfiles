@@ -8,7 +8,7 @@ RUN set -xe; \
 WORKDIR ${UNIFI_HOME}
 EXPOSE 8080 8443 8880 8843 6789 3478/udp 5656-5699/udp 10001/udp
 
-ENV UNIFI_VERSION=5.6.26
+ENV UNIFI_VERSION=5.6.29
 RUN set -xe; \
     curl -sSLO http://dl.ubnt.com/unifi/${UNIFI_VERSION}/unifi_sysvinit_all.deb \
     && dpkg-deb -x unifi_sysvinit_all.deb /tmp/unifi \
