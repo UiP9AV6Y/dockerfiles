@@ -47,4 +47,4 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
     org.label-schema.version=$VERSION \
     org.label-schema.schema-version="1.0" \
     com.microscaling.docker.dockerfile="/unifi-controller/Dockerfile" \
-    com.microscaling.license="BSD"
+    com.microscaling.license="GPL-3.0"
