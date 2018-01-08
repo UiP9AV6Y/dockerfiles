@@ -46,5 +46,5 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
     org.label-schema.vendor="Ubiquiti Networks, Inc." \
     org.label-schema.version=$VERSION \
     org.label-schema.schema-version="1.0" \
-    com.microscaling.docker.dockerfile="/Dockerfile" \
+    com.microscaling.docker.dockerfile="/unifi-controller/Dockerfile" \
     com.microscaling.license="BSD"
