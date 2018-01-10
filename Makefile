@@ -32,3 +32,13 @@ clean: $(IMAGES:=/clean)
 .PHONY: %/clean
 %/clean:
 	cd $(@D) && $(MAKE) clean
+
+.PHONY: %
+%:
+	@cp -r \
+		$(PROJECT_ROOT)/.project/scaffold \
+		$(PROJECT_ROOT)/$@
+	@sed -i \
+		-e "s|@PROJECT@|$@|g" \
+		$(PROJECT_ROOT)/$@/Dockerfile
+	@$(info $(PROJECT_ROOT)/$@ created)
