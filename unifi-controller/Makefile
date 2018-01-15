@@ -24,13 +24,13 @@ clean: docker-cloud-clean
 .PHONY: version-sync
 version-sync: $(PROJECT_ROOT)/hooks/build $(PROJECT_ROOT)/hooks/post_push $(PROJECT_ROOT)/Dockerfile
 	@sed -i \
-		-re 's|^VERSION=.*|VERSION=$(VERSION)-$(REVISION)|' \
+		-re 's|^VERSION=.+|VERSION=$(VERSION)-$(REVISION)|' \
 		$(PROJECT_ROOT)/hooks/build
 	@sed -i \
-		-re 's|^VERSION=.*|VERSION=$(VERSION)|' \
+		-re 's|^VERSION=.+|VERSION=$(VERSION)|' \
 		$(PROJECT_ROOT)/hooks/post_push
 	@sed -i \
-		-re 's|^(ENV [0-9A-Z_]*VERSION)=.+|\1=$(VERSION)|' \
+		-re 's|^(ENV UNIFI_VERSION)=.+|\1=$(VERSION)|' \
 		$(PROJECT_ROOT)/Dockerfile
 
 include $(PROJECT_ROOT)/../.project/common.mk
