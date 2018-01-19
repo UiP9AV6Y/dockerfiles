@@ -21,18 +21,6 @@ publish: $(IMAGES:/publish)
 .PHONY: clean
 clean: $(IMAGES:=/clean)
 
-.PHONY: %/build
-%/build:
-	cd $(@D) && $(MAKE) build
-
-.PHONY: %/publish
-%/publish:
-	cd $(@D) && $(MAKE) publish
-
-.PHONY: %/clean
-%/clean:
-	cd $(@D) && $(MAKE) clean
-
 .PHONY: %
 %:
 	@cp -r \
