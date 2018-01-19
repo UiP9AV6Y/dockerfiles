@@ -21,7 +21,6 @@ publish: $(IMAGES:/publish)
 .PHONY: clean
 clean: $(IMAGES:=/clean)
 
-.PHONY: %
 %:
 	@cp -r \
 		$(PROJECT_ROOT)/.project/scaffold \
