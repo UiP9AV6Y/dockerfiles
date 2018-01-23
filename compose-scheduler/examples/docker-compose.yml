@@ -1,0 +1,23 @@
+---
+
+version: '2.3'
+
+services:
+  scheduler:
+    image: compose-scheduler:latest
+    build: ..
+    working_dir: /src
+    environment:
+      COMPOSE_PROJECT_NAME: ${COMPOSE_PROJECT_NAME:-examples}
+      COMPOSE_FILE: ${COMPOSE_FILE:-docker-compose.yml}
+      SCHEDULE_EXAMPLE_1: "schedule-date"
+      SCHEDULE_EXAMPLE_2: "schedule-uptime start @minutely"
+    volumes:
+       - /var/run/docker.sock:/var/run/docker.sock
+       - .:/src:ro
+  schedule-date:
+    image: compose-scheduler:latest
+    command: date
+  schedule-uptime:
+    image: compose-scheduler:latest
+    command: uptime
