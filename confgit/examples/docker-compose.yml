@@ -1,0 +1,90 @@
+---
+
+version: '2.3'
+
+services:
+  # self-hosted repository with SSH access.
+  # this is usually hosted externally.
+  repository-ssh:
+    image: confgit-example-repository:ssh
+    build:
+      context: ./repository
+      dockerfile: Dockerfile.ssh
+    networks:
+      - repository
+  # self-hosted repository with HTTP access.
+  # this is usually hosted externally.
+  repository-http:
+    image: confgit-example-repository:http
+    build:
+      context: ./repository
+      dockerfile: Dockerfile.http
+    networks:
+      - repository
+  config:
+    image: confgit:latest
+    build: ..
+    # git clone target
+    working_dir: /etc/nginx/conf.d
+    command: -b config ssh://repository-ssh:2222/git/repo.git
+    environment:
+      CONFGIT_USERNAME: git
+      CONFGIT_IDENTITY_SECRET: ssh_key
+      CONFGIT_SSH_OPTIONS: IdentitiesOnly=yes PasswordAuthentication=no
+      # those variables are not relevant to the functionality
+      # of the confgit image, but will be read by the post-retrieval
+      # hook in the repository
+      NGINX_PORT: 80
+      NGINX_HOST: example.com
+    depends_on:
+      - repository-ssh
+    volumes:
+      - web-config:/etc/nginx/conf.d
+      # emulating docker secrets
+      - ./repository/id_example:/run/secrets/ssh_key:ro
+    networks:
+      - repository
+  content:
+    image: confgit:latest
+    build: ..
+    environment:
+      CONFGIT_USERNAME: git
+      CONFGIT_PASSWORD_FILE: /tmp/password
+      # git clone target
+      CONFGIT_DIRECTORY: /usr/share/nginx/
+      CONFGIT_URL: http://repository-http:8022/git/repo.git
+      CONFGIT_BRANCH: content
+      # prevent the setup hook from being executed
+      CONFGIT_NO_HOOK: 'true'
+    depends_on:
+      - repository-http
+    volumes:
+      # this will not work. docker-entry point will clear out
+      # the clone target, which is /usr/share/nginx,
+      # but /usr/share/nginx/public is a docker volume, which
+      # cannot be deleted (will result in 'Resource busy')
+      #- web-content:/usr/share/nginx/public
+      - web-content:/usr/share/nginx
+      - ./repository/password:/tmp/password:ro
+    networks:
+      - repository
+  web:
+    image: nginx:alpine
+    depends_on:
+      - config
+      - content
+    volumes_from:
+       - config:ro
+       - content:ro
+    ports:
+      - "8080:80"
+    networks:
+      - frontend
+
+volumes:
+  web-config:
+  web-content:
+
+networks:
+  frontend:
+  repository:
