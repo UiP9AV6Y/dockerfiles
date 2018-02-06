@@ -1,0 +1,57 @@
+---
+
+version: '2.3'
+
+services:
+  provider:
+    image: python:3-alpine
+    command: [ "python3", "-m", "http.server", "8080"]
+    working_dir: /data
+    volumes:
+      - ./provider:/data
+    networks:
+      - setup
+  config:
+    image: dns-blackhole:latest
+    build: ..
+    command: [ "-s", "dnsmasq", "-o", "/etc/dnsmasq.d/blackhole.conf", ]
+    environment:
+      DNSBH_HOSTS_example: http://provider:8080/example-hosts.txt
+      DNSBH_HOSTS_StevenBlack: https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
+      DNSBH_EASYLIST_EasyList: https://easylist.to/easylist/easylist.txt
+      DNSBH_EASYLIST_BarbBlock: https://raw.githubusercontent.com/paulgb/BarbBlock/master/BarbBlock.txt
+      DNSBH_DISCONNECT_URL: https://services.disconnect.me/disconnect-plaintext.json
+      DNSBH_DISCONNECT_CATEGORIES: "Advertising Analytics"
+      DNSBH_BLACKLISTED_example: google.com
+      DNSBH_WHITELISTED_example: stackoverflow.com
+    depends_on:
+      - provider
+    volumes:
+      - name-data:/etc/dnsmasq.d/
+    networks:
+      - setup
+  nameserver:
+    image: andyshinn/dnsmasq:2.78
+    command: [ "--log-facility=-", ]
+    cap_add:
+      - NET_ADMIN
+    depends_on:
+      - config
+    volumes:
+      - name-data:/etc/dnsmasq.d/
+    networks:
+      - domain_name
+  consumer:
+    image: dns-blackhole-example-consumer:latest
+    build: ./consumer
+    depends_on:
+      - nameserver
+    networks:
+      - domain_name
+
+volumes:
+  name-data:
+
+networks:
+  domain_name:
+  setup:
