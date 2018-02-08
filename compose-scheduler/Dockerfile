@@ -1,4 +1,4 @@
-FROM docker/compose:1.18.0
+FROM docker/compose:1.19.0
 
 ENV SCHEDULER_HOME=/etc/crontabs
 RUN set -xe; \
