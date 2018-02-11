@@ -92,6 +92,28 @@ some values can be changed with further variables:
 
   the default value is 4m
 
+### auxiliary files
+
+root zone hints, trust anchors and control SSL certificates,
+are created automatically upon startup unless disabled:
+
+* *DISABLE_HINTS_CREATION*
+
+  if set, the root hints file (/etc/unbound/aux/root.hints)
+  will not be created/updated
+
+* *DISABLE_ANCHOR_CREATION*
+
+  if set, the DNS root zone anchors (/etc/unbound/aux/root.key)
+  will not be created/updated
+
+* *DISABLE_CONTROL_SETUP*
+
+  defining this environment variable will prevent the SSL
+  keys and certificates for `unbound-control` from being created.
+  those files reside in /etc/unbound/ssl and are used by the
+  container healthcheck.
+
 # image setup
 
 the image is based on the **alpine** image from
