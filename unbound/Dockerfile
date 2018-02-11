@@ -84,9 +84,6 @@ COPY bin/ \
 RUN set -xe; \
   mkdir -p ${UNBOUND_HOME}/ssl \
   && unbound-control-setup -d ${UNBOUND_HOME}/ssl \
-  && unbound-anchor \
-    -a ${UNBOUND_HOME}/aux/root.key \
-    -r ${UNBOUND_HOME}/aux/root.hints || true \
   && chown -R unbound:unbound ${UNBOUND_HOME}
 
 VOLUME [ \

@@ -39,6 +39,12 @@ server:
 EOF
 }
 
+root_trust_anchor() {
+  unbound-anchor \
+    -r ${UNBOUND_HOME}/aux/root.hints \
+    -a "${1}"  || true
+}
+
 if test $# -gt 0; then
   case "$1" in
     -*)
@@ -62,6 +68,10 @@ fi
 
 if test -n "${ENABLE_OPTIMIZATION+x}"; then
   server_optimization "${UNBOUND_HOME}/conf.d/server-limits.conf"
+fi
+
+if test -z "${DISABLE_ANCHOR_CREATION+x}"; then
+  root_trust_anchor "${UNBOUND_HOME}/aux/root.key"
 fi
 
 exec unbound -d "$@"
