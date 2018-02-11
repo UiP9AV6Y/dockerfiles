@@ -39,6 +39,12 @@ server:
 EOF
 }
 
+icann_bundle() {
+  wget -q \
+    -O "${1}" \
+    "https://data.iana.org/root-anchors/icannbundle.pem"
+}
+
 root_hints() {
   wget -q \
     -O "${1}" \
@@ -47,7 +53,8 @@ root_hints() {
 
 root_trust_anchor() {
   unbound-anchor \
-    -r ${UNBOUND_HOME}/aux/root.hints \
+    -r "${UNBOUND_HOME}/aux/root.hints" \
+    -c "${UNBOUND_HOME}/aux/icannbundle.pem" \
     -a "${1}"  || true
 }
 
@@ -79,6 +86,10 @@ fi
 
 if test -n "${ENABLE_OPTIMIZATION+x}"; then
   server_optimization "${UNBOUND_HOME}/conf.d/server-limits.conf"
+fi
+
+if test -z "${DISABLE_CABUNDLE_CREATION+x}"; then
+  icann_bundle "${UNBOUND_HOME}/aux/icannbundle.pem"
 fi
 
 if test -z "${DISABLE_HINTS_CREATION+x}"; then

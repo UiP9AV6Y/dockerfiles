@@ -97,6 +97,12 @@ some values can be changed with further variables:
 root zone hints, trust anchors and control SSL certificates,
 are created automatically upon startup unless disabled:
 
+* *DISABLE_CABUNDLE_CREATION*
+
+  the existence of this environment variable prevents the
+  creation of the ICANN root update certificate file
+  /etc/unbound/aux/icannbundle.pem
+
 * *DISABLE_HINTS_CREATION*
 
   if set, the root hints file (/etc/unbound/aux/root.hints)
