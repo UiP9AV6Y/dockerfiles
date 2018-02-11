@@ -51,6 +51,11 @@ root_trust_anchor() {
     -a "${1}"  || true
 }
 
+control_setup() {
+  unbound-control-setup \
+    -d "${1}"
+}
+
 if test $# -gt 0; then
   case "$1" in
     -*)
@@ -82,6 +87,10 @@ fi
 
 if test -z "${DISABLE_ANCHOR_CREATION+x}"; then
   root_trust_anchor "${UNBOUND_HOME}/aux/root.key"
+fi
+
+if test -z "${DISABLE_CONTROL_SETUP+x}"; then
+  control_setup "${UNBOUND_HOME}/ssl"
 fi
 
 exec unbound -d "$@"

@@ -62,6 +62,7 @@ RUN set -xe; \
     expat \
   && mkdir -p \
     ${UNBOUND_HOME}/conf.d \
+    ${UNBOUND_HOME}/ssl \
     ${UNBOUND_HOME}/aux
 
 WORKDIR ${UNBOUND_HOME}
@@ -79,11 +80,6 @@ COPY server-config/ \
   ${UNBOUND_HOME}/server-conf.d/
 COPY bin/ \
   /usr/local/bin/
-
-RUN set -xe; \
-  mkdir -p ${UNBOUND_HOME}/ssl \
-  && unbound-control-setup -d ${UNBOUND_HOME}/ssl \
-  && chown -R unbound:unbound ${UNBOUND_HOME}
 
 VOLUME [ \
   "${UNBOUND_HOME}/aux", \
