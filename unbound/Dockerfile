@@ -87,8 +87,8 @@ VOLUME [ \
   "${UNBOUND_HOME}/conf.d", \
   "${UNBOUND_HOME}/server-conf.d" \
 ]
-HEALTHCHECK --interval=5m --timeout=3s --start-period=10s \
-  CMD /usr/local/sbin/unbound-control -c ${UNBOUND_HOME}/unbound.conf status || exit 1
+HEALTHCHECK --interval=1m --timeout=3s --start-period=10s \
+  CMD /usr/sbin/unbound-control -c ${UNBOUND_HOME}/unbound.conf status -s 127.0.0.1:8953 || exit 1
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 CMD [ "unbound", "-c", "/etc/unbound/unbound.conf" ]
 
