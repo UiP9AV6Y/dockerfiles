@@ -39,6 +39,12 @@ server:
 EOF
 }
 
+root_hints() {
+  wget -q \
+    -O "${1}" \
+    "https://www.internic.net/domain/named.cache"
+}
+
 root_trust_anchor() {
   unbound-anchor \
     -r ${UNBOUND_HOME}/aux/root.hints \
@@ -68,6 +74,10 @@ fi
 
 if test -n "${ENABLE_OPTIMIZATION+x}"; then
   server_optimization "${UNBOUND_HOME}/conf.d/server-limits.conf"
+fi
+
+if test -z "${DISABLE_HINTS_CREATION+x}"; then
+  root_hints "${UNBOUND_HOME}/aux/root.hints"
 fi
 
 if test -z "${DISABLE_ANCHOR_CREATION+x}"; then

@@ -60,7 +60,9 @@ RUN set -xe; \
     libressl \
     openssl \
     expat \
-  && mkdir -p ${UNBOUND_HOME}/conf.d
+  && mkdir -p \
+    ${UNBOUND_HOME}/conf.d \
+    ${UNBOUND_HOME}/aux
 
 WORKDIR ${UNBOUND_HOME}
 EXPOSE 53 53/udp 853 853/udp 8953
@@ -69,9 +71,6 @@ COPY --from=builder /app/usr/sbin/ \
   /usr/sbin/
 COPY --from=builder /app/usr/lib/ \
   /usr/lib/
-# initial copy of hints
-ADD https://www.internic.net/domain/named.cache \
-  ${UNBOUND_HOME}/aux/root.hints
 # core essentials which harmonize with the Dockerfile settings
 COPY unbound.conf \
   ${UNBOUND_HOME}/
