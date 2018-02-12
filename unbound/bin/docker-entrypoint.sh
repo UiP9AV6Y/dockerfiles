@@ -8,6 +8,7 @@ forward-zone:
     forward-addr: ${UPSTREAM_PRIMARY:-8.8.8.8}
     forward-addr: ${UPSTREAM_SECONDARY:-8.8.4.4}
 EOF
+  echo "catch-all forward zone config created: $1"
 }
 
 server_optimization() {
@@ -37,30 +38,38 @@ server:
 
   so-reuseport: yes
 EOF
+  echo "server optimization config created: $1"
 }
 
 icann_bundle() {
   wget -q \
     -O "${1}" \
     "https://data.iana.org/root-anchors/icannbundle.pem"
+  echo "CA bundle created: $1"
 }
 
 root_hints() {
   wget -q \
     -O "${1}" \
     "https://www.internic.net/domain/named.cache"
+  echo "root zone hints created: $1"
 }
 
 root_trust_anchor() {
-  unbound-anchor \
+  if unbound-anchor \
     -r "${UNBOUND_HOME}/aux/root.hints" \
     -c "${UNBOUND_HOME}/aux/icannbundle.pem" \
-    -a "${1}"  || true
+    -a "${1}"; then
+    echo "trust anchor created: $1"
+  else
+    echo "trust anchor already up-to-date: $1"
+  fi
 }
 
 control_setup() {
   unbound-control-setup \
     -d "${1}"
+  echo "certificates created in $1"
 }
 
 if test $# -gt 0; then
