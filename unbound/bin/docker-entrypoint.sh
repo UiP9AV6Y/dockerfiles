@@ -67,9 +67,15 @@ root_trust_anchor() {
 }
 
 control_setup() {
-  unbound-control-setup \
-    -d "${1}"
-  echo "certificates created in $1"
+  if test -s "${UNBOUND_HOME}/ssl/unbound_control.pem" \
+    -a -s "${UNBOUND_HOME}/ssl/unbound_control.pem" \
+    -a -n "${LAZY_CONTROL_SETUP+x}"; then
+    echo "certificates already exist in $1"
+  else
+    unbound-control-setup \
+      -d "${1}"
+    echo "certificates created in $1"
+  fi
 }
 
 if test $# -gt 0; then

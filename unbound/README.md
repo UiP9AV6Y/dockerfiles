@@ -120,6 +120,14 @@ are created automatically upon startup unless disabled:
   those files reside in /etc/unbound/ssl and are used by the
   container healthcheck.
 
+* *LAZY_CONTROL_SETUP*
+
+  in combination with *DISABLE_CONTROL_SETUP*, this environment
+  variable controls the behaviour, should the certificates
+  already exist. if the variable is defined, the certificates
+  will only be generated if not already present, otherwise they
+  will be created with every container start.
+
 # image setup
 
 the image is based on the **alpine** image from
