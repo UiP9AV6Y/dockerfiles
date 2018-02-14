@@ -3,7 +3,7 @@ PROJECT_ROOT := $(dir $(lastword $(MAKEFILE_LIST)))
 
 # run `make version-sync` on changes
 VERSION := 1.6.8
-REVISION := 2
+REVISION := 3
 
 
 .PHONY: default
