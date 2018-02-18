@@ -51,8 +51,7 @@ RUN set -xe; \
   --with-dynmodules="" \
   --enable-static \
   --disable-shared \
-  # https://github.com/PowerDNS/pdns/issues/6040
-  --disable-tools \
+  --enable-tools \
   --enable-libsodium \
   --enable-experimental-pkcs11 \
   'CC=gcc' \
