@@ -1,0 +1,34 @@
+---
+
+version: '2.3'
+
+services:
+  nameserver-mysql:
+    image: powerdns:mysql
+    build:
+      context: ..
+      args:
+        FLAVOUR: mysql
+    environment:
+      DB_HOST: mysql
+      DB_USER: pdns
+      DB_PASS: pdns
+      DB_NAME: pdns
+    ports:
+      - "127.0.0.1:8081:8081"
+    networks:
+      - mysql
+    depends_on:
+      - mysql
+  mysql:
+    image: mariadb:latest
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+      MYSQL_DATABASE: pdns
+      MYSQL_PASSWORD: pdns
+      MYSQL_USER: pdns
+    networks:
+      - mysql
+
+networks:
+  mysql:

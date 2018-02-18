@@ -1,0 +1,22 @@
+---
+
+version: '2.3'
+
+services:
+  nameserver-sqlite3:
+    image: powerdns:sqlite3
+    build:
+      context: ..
+      args:
+        FLAVOUR: sqlite3
+    environment:
+      DB_HOST: /data/pdns.sqlite3
+      SQLITE3_SYNCHRONOUS: 0
+      SQLITE3_FOREIGN_KEYS: 'true'
+    ports:
+      - "127.0.0.1:8081:8081"
+    volumes:
+      - sqlite3:/data/
+
+volumes:
+  sqlite3:

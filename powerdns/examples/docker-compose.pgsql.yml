@@ -1,0 +1,33 @@
+---
+
+version: '2.3'
+
+services:
+  nameserver-pgsql:
+    image: powerdns:pgsql
+    build:
+      context: ..
+      args:
+        FLAVOUR: pgsql
+    environment:
+      DB_HOST: pqsql
+      DB_USER: pdns
+      DB_PASS: pdns
+      DB_NAME: pdns
+    ports:
+      - "127.0.0.1:8081:8081"
+    networks:
+      - pqsql
+    depends_on:
+      - pqsql
+  pqsql:
+    image: postgres:alpine
+    environment:
+      POSTGRES_PASSWORD: pdns
+      POSTGRES_USER: pdns
+      POSTGRES_DB: pdns
+    networks:
+      - pqsql
+
+networks:
+  pqsql:
