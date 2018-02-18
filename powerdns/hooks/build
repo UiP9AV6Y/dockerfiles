@@ -6,6 +6,8 @@ VCS_URL=$(git config --get remote.origin.url)
 VCS_REF=$(git rev-parse --short HEAD)
 VERSION=4.1.0-0
 
+env
+
 docker build \
   --build-arg FLAVOUR=$CACHE_TAG \
   --build-arg VERSION=$VERSION \
