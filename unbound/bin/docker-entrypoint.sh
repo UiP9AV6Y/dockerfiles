@@ -2,13 +2,16 @@
 set -eu -o noglob
 
 catch_all_forwarder() {
-  cat <<EOF | tee "$1" >/dev/null
+  sed -i -e '/# catch-all/,/# eo catch-all/d' "${1}"
+  cat <<EOF >> "$1"
+# catch-all
 forward-zone:
     name: "."
     forward-addr: ${UPSTREAM_PRIMARY:-8.8.8.8}
     forward-addr: ${UPSTREAM_SECONDARY:-8.8.4.4}
+# eo catch-all
 EOF
-  echo "catch-all forward zone config created: $1"
+  echo "catch-all forward zone config created"
 }
 
 server_optimization() {
@@ -17,7 +20,9 @@ server_optimization() {
   RRSET_SIZE=$(expr ${MSG_SIZE} * 2)
   SLABS=${CACHE_SLABS:-${NUMPROC}}
 
-  cat <<EOF | tee "$1" >/dev/null
+  sed -i -e '/# optimization/,/# eo optimization/d' "${1}"
+  cat <<EOF >> "$1"
+# optimization
 server:
   num-threads: ${NUMPROC}
 
@@ -37,8 +42,9 @@ server:
   so-sndbuf: ${SO_SNDBUF:-4}m
 
   so-reuseport: yes
+# eo optimization
 EOF
-  echo "server optimization config created: $1"
+  echo "server optimization config created"
 }
 
 icann_bundle() {
@@ -96,11 +102,11 @@ if test $# -gt 0; then
 fi
 
 if test -n "${ENABLE_CATCH_ALL+x}"; then
-  catch_all_forwarder "${UNBOUND_HOME}/conf.d/forward-zone.conf"
+  catch_all_forwarder "${UNBOUND_HOME}/unbound.conf"
 fi
 
 if test -n "${ENABLE_OPTIMIZATION+x}"; then
-  server_optimization "${UNBOUND_HOME}/conf.d/server-limits.conf"
+  server_optimization "${UNBOUND_HOME}/unbound.conf"
 fi
 
 if test -z "${DISABLE_CABUNDLE_CREATION+x}"; then
