@@ -1,18 +1,19 @@
 #!/bin/sh -eu
 
 PROGRAM=$(basename $0)
-DATADIR=${UNIFI_HOME}/data
-LOGDIR=${UNIFI_HOME}/logs
-RUNDIR=${UNIFI_HOME}/run
-MONGO_HOST=${MONGO_PORT_27017_TCP_ADDR:-mongo}
-MONGO_PORT=${MONGO_PORT_27017_TCP_PORT:-27017}
-DB_NAME=unifi-ace
-DB_URI="mongodb://${MONGO_HOST}:${MONGO_PORT}/${DB_NAME}"
-STAT_URI="mongodb://${MONGO_HOST}:${MONGO_PORT}/${DB_NAME}_stat"
-SYSTEM_IP=""
+DB_URI=""
+STAT_URI=""
 DEBUG=false
 JOURNAL=false
 MAINCLASS=com.ubnt.ace.Launcher
+
+: ${SYSTEM_IP:=""}
+: ${DATADIR:=${UNIFI_HOME}/data}
+: ${LOGDIR:=${UNIFI_HOME}/logs}
+: ${RUNDIR:=${UNIFI_HOME}/run}
+: ${DB_NAME:=unifi-ace}
+: ${MONGO_HOST:=${MONGO_PORT_27017_TCP_ADDR:-mongo}}
+: ${MONGO_PORT:=${MONGO_PORT_27017_TCP_PORT:-27017}}
 
 usage() {
   cat <<EOF
@@ -102,6 +103,14 @@ JVM_OPTS="\
   -Dunifi.rundir=${RUNDIR} \
   -Djava.awt.headless=true \
   -Dfile.encoding=UTF-8"
+
+if test -z "${DB_URI}"; then
+  DB_URI="mongodb://${MONGO_HOST}:${MONGO_PORT}/${DB_NAME}"
+fi
+
+if test -z "${STAT_URI}"; then
+  STAT_URI="mongodb://${MONGO_HOST}:${MONGO_PORT}/${DB_NAME}_stat"
+fi
 
 # create config in case it does not exist yet
 touch "$FILE"

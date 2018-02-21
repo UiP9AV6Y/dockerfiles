@@ -40,6 +40,53 @@ listening on to the host by specifying the -p option, for example
 *-p 80:8080* to publish port 80 from the container host to port
 8080 in the container. make sure the port you're using is free.
 
+## using environment variables
+
+`docker run -d --name my-running-unifi-controller
+  --env SYSTEM_IP=10.24.0.1
+  --link some-mongo:mongo
+  unifi-controller:latest`
+
+* *SYSTEM_IP*
+
+  public address for communication with devices
+
+* *DATADIR*
+
+  storage directory for configuration.
+
+  default: /usr/lib/unifi/data
+
+* *LOGDIR*
+
+  storage directory for log files
+
+  default: /usr/lib/unifi/logs
+
+* *RUNDIR*
+
+  storage directory for runtime files
+
+  default: /usr/lib/unifi/run
+
+* *DB_NAME*
+
+  database name and name prefix for the stats db
+
+  default: unifi-ace
+
+* *MONGO_HOST*
+
+  host name/address of the mongo db instance
+
+  default: **$MONGO_PORT_27017_TCP_ADDR** or mongo
+
+* *MONGO_PORT*
+
+  port number of the mongo db instance
+
+  default: **$MONGO_PORT_27017_TCP_PORT** or 27017
+
 ## with custom instructions via commandline
 
 `docker run -d --name my-running-unifi-controller

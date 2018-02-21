@@ -6,16 +6,18 @@ services:
   webapp:
     image: unifi-controller:latest
     build: ..
+    environment:
+      MONGO_HOST: persistence
     ports:
       - "8080:8080"
       - "8443:8443"
     depends_on:
-      - mongo
+      - persistence
     volumes:
        - webapp-backups:/usr/lib/unifi/data/backup/autobackup
     networks:
       - unifi_controller
-  mongo:
+  persistence:
     image: mongo:latest
     volumes:
       - mongo-data:/data/db
