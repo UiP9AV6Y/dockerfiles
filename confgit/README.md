@@ -99,6 +99,10 @@ run the image with the *-?* option
 
   Local directory to place the repository content. Defaults
   to the current working directory.
+* *CONFGIT_SUBMODULES*
+
+  Git submodules are only initialized if this variable is
+  defined.
 * *CONFGIT_NO_HOOK*
 
   Omit the execution of the *confgit* hook from the

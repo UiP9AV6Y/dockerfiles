@@ -197,6 +197,12 @@ else
   git checkout -f origin/HEAD
 fi
 
+unset GIT_WORK_TREE
+
+if test -n "${CONFGIT_SUBMODULES+x}"; then
+  git submodule update --init --recursive
+fi
+
 if test -s "${CONFGIT_DIRECTORY}/.confgit/setup" -a -z "${CONFGIT_NO_HOOK+x}"; then
   cd ${CONFGIT_DIRECTORY} && \
   sh "${CONFGIT_DIRECTORY}/.confgit/setup" || true
