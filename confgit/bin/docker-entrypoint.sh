@@ -2,7 +2,7 @@
 
 usage() {
   cat <<"EOF"
-usage: docker run confgit [-b BRANCH] URL [DIR]
+usage: docker run confgit [-s SHA1|-t TAG|-b BRANCH] URL [DIR]
 EOF
 }
 
@@ -103,23 +103,22 @@ EOF
 
 git_clone() {
   SOURCE="$1"
-  TARGET="$2"
 
-  shift 2
+  shift 1
 
-  if test -d "${TARGET}"; then
-    # deleting and recreating the directory
-    # might not work if it is a shared docker volume
-    find "${TARGET}" -mindepth 1 -delete
+  if test -d "${GIT_DIR}"; then
+    git fetch "$@" "${SOURCE}"
+    git fetch "$@" --tags "${SOURCE}"
+  elif test -d "${GIT_WORK_TREE}"; then
+    # clean GIT_WORK_TREE first
+    find "${GIT_WORK_TREE}" -mindepth 1 -delete
+    # despite the documentation, git cannot clone into an empty directory
+    TARGET=$(mktemp -u -d)
+    GIT_WORK_TREE="${TARGET}" git clone "$@" "${SOURCE}" "${GIT_DIR}"
+    cp -r "${TARGET}/." "${GIT_WORK_TREE}"
+  else
+    git clone "$@" "${SOURCE}" "${GIT_DIR}"
   fi
-
-  git clone "$@" \
-    "${SOURCE}" \
-    "${TARGET}"
-
-  # alternatively we could fiddle around with
-  # GIT_DIR/GIT_WORK_TREE or --separate-git-dir
-  rm -rf "${TARGET}/.git"
 }
 
 if test $# -gt 0; then
@@ -137,11 +136,19 @@ if test $# -gt 0; then
   esac
 fi
 
+REPO_SHA=''
+REPO_TAG=''
 REPO_BRANCH=''
-GIT_ARGV='--depth 1'
+GIT_ARGV=''
 
-while getopts b:a:? OPT; do
+while getopts s:t:b:a:? OPT; do
   case "$OPT" in
+    s)
+      REPO_SHA=$OPTARG
+      ;;
+    t)
+      REPO_TAG=$OPTARG
+      ;;
     b)
       REPO_BRANCH=$OPTARG
       ;;
@@ -156,12 +163,10 @@ while getopts b:a:? OPT; do
 done
 shift $(expr $OPTIND - 1)
 
+: ${CONFGIT_SHA:=$REPO_SHA}
+: ${CONFGIT_TAG:=$REPO_TAG}
 : ${CONFGIT_BRANCH:=$REPO_BRANCH}
 : ${CONFGIT_DIRECTORY:=$PWD}
-
-if test -n "${CONFGIT_BRANCH}"; then
-  GIT_ARGV="${GIT_ARGV} --branch ${CONFGIT_BRANCH}"
-fi
 
 if test $# -gt 0;then
   CONFGIT_URL="$1"
@@ -176,10 +181,21 @@ if test $# -gt 1; then
 fi
 
 setup_ssh "${HOME}/.ssh"
+export GIT_DIR=/.git
+export GIT_WORK_TREE=${CONFGIT_DIRECTORY}
 git_clone \
   "${CONFGIT_URL}" \
-  "${CONFGIT_DIRECTORY}" \
   ${GIT_ARGV}
+
+if test -n "${CONFGIT_SHA}"; then
+  git reset --hard "${CONFGIT_SHA}"
+elif test -n "${CONFGIT_TAG}"; then
+  git checkout -f "${CONFGIT_TAG}"
+elif test -n "${CONFGIT_BRANCH}"; then
+  git checkout -f "origin/${CONFGIT_BRANCH}"
+else
+  git checkout -f origin/HEAD
+fi
 
 if test -s "${CONFGIT_DIRECTORY}/.confgit/setup" -a -z "${CONFGIT_NO_HOOK+x}"; then
   cd ${CONFGIT_DIRECTORY} && \

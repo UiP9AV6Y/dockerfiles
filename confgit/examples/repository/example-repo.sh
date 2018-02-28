@@ -55,7 +55,8 @@ cat <<"EOF" > public/index.html
 EOF
 git add .confgit public
 git commit -m 'Initial website implementation'
-git push -u origin content
+git tag -a -m 'Release of v1.0.0-content' v1.0.0-content
+git push -u origin content v1.0.0-content
 
 #
 # CONFIG
@@ -87,7 +88,8 @@ EOF
 
 git add .confgit default.conf.tpl
 git commit -m 'Initial server configuration'
-git push -u origin config
+git tag -a -m 'Release of v1.0.0-config' v1.0.0-config
+git push -u origin config v1.0.0-config
 
 cd "$CHECKPOINT"
 rm -rf "$LOCAL_REPO"

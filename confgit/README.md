@@ -27,18 +27,18 @@ using docker-compose.
 
 ## with instructions via commandline
 
-`confgit [-b BRANCH] URL [DIR] [GIT_ARG]...`
+`confgit [-s SHA1|-t TAG|-b BRANCH] URL [DIR] [GIT_ARG]...`
 
 The *URL* parameter specifies the upstream Git repository to
-retrieve. It is mandatory unless the **CONFGIT_URL** environment
-variable is provided as well. *DIR* contains a local file path
-which will hold the repository content; it must not necessarily
-exist beforehand and will default to the current working
-directory, unless **CONFGIT_DIRECTORY** is defined.
-The latest version of default branch is retrieved if no other
-instructions are provided. The *-b* parameter maps to git's
-[**--branch**][] parameter. All other parameters are passed on
-to `git` unaltered.
+retrieve. It is mandatory unless the **CONFGIT_URL**
+environment variable is provided as well. *DIR* contains a
+local file path which will hold the repository content; it
+must not necessarily exist beforehand and will default to
+the current working directory, unless **CONFGIT_DIRECTORY**
+is defined.
+The latest version of the default branch is retrieved if no
+other instructions are provided. All other parameters are
+passed on to `git` unaltered.
 
 to get more information about the supported commandlines,
 run the image with the *-?* option
@@ -88,21 +88,28 @@ run the image with the *-?* option
   Remote Git repository to retrieve.
 * *CONFGIT_BRANCH*
 
-  Git tag/branch to retrieve.
+  Git branch to retrieve.
+* *CONFGIT_SHA*
+
+  Git commit to retrieve
+* *CONFGIT_TAG*
+
+  Git tag to fetch
 * *CONFGIT_DIRECTORY*
 
-  Local directory to place the repository content. Defaults to
-  the current working directory.
+  Local directory to place the repository content. Defaults
+  to the current working directory.
 * *CONFGIT_NO_HOOK*
 
-  Omit the execution of the *confgit* hook from the repository.
-  This is intended for scenarios where the upstream source cannot
-  be trusted or its logic does not need to apply to the current
-  context.
+  Omit the execution of the *confgit* hook from the
+  repository.
+  This is intended for scenarios where the upstream source
+  cannot be trusted or its logic does not need to apply to
+  the current context.
 * *CONFGIT_SSH_OPTIONS*
 
   List of [ssh options][] separated by a space. The key/value
-  separator is =. (e.g. **IdentitiesOnly=yes 
+  separator is =. (e.g. **IdentitiesOnly=yes
   PasswordAuthentication=no**)
 
 In its simplest form, the image can be used to clone an

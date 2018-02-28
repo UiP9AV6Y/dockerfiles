@@ -53,7 +53,7 @@ services:
       # git clone target
       CONFGIT_DIRECTORY: /usr/share/nginx/
       CONFGIT_URL: http://repository-http:8022/git/repo.git
-      CONFGIT_BRANCH: content
+      CONFGIT_TAG: v1.0.0-content
       # prevent the setup hook from being executed
       CONFGIT_NO_HOOK: 'true'
     depends_on:
