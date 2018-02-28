@@ -2,7 +2,7 @@
 
 usage() {
   cat <<"EOF"
-usage: docker run confgit [-s SHA1|-t TAG|-b BRANCH] URL [DIR]
+usage: docker run confgit [-s SHA1|-t TAG|-b BRANCH] URL [DIR] [GIT_ARG...]
 EOF
 }
 
@@ -170,19 +170,22 @@ shift $(expr $OPTIND - 1)
 
 if test $# -gt 0;then
   CONFGIT_URL="$1"
+  shift
 elif test -z "${CONFGIT_URL+x}"; then
   echo 'no repository URL provided' 1>&2
   usage 1>&2
   exit 1
 fi
 
-if test $# -gt 1; then
+if test $# -gt 0; then
   CONFGIT_DIRECTORY="$2"
+  shift
 fi
 
 setup_ssh "${HOME}/.ssh"
 export GIT_DIR=/.git
 export GIT_WORK_TREE=${CONFGIT_DIRECTORY}
+GIT_ARGV="${GIT_ARGV} $@"
 git_clone \
   "${CONFGIT_URL}" \
   ${GIT_ARGV}
