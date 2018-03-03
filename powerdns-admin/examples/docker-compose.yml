@@ -1,0 +1,84 @@
+---
+
+version: '2.3'
+
+services:
+  app:
+    image: powerdns-admin:pgsql
+    build:
+      context: ..
+      args:
+        FLAVOUR: pgsql
+    environment:
+      UWSGI_PROTOCOL: uwsgi
+      POWERDNS_ADMIN_DB_URI: 'postgresql://pdns:pdns@pgsql-app:5432/pdns'
+      POWERDNS_ADMIN_API_URL: http://nameserver:8081/
+      POWERDNS_ADMIN_API_KEY: example
+      POWERDNS_ADMIN_USERNAME: admin
+      POWERDNS_ADMIN_PASSWORD: admin
+    depends_on:
+      - nameserver
+      - pgsql-app
+    volumes:
+      - app-uploads:/app/uploads
+    networks:
+      - backend
+      - nameserver
+      - persistence-app
+  frontend:
+    image: nginx:alpine
+    depends_on:
+      - app
+    volumes:
+      - ./frontend/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - "127.0.0.1:8080:80"
+    networks:
+      - backend
+  nameserver:
+    image: uip9av6y/powerdns:pgsql
+    command: [ "--api=yes", "--api-key=example"]
+    environment:
+      DB_HOST: pgsql-nameserver
+      DB_USER: pdns
+      DB_PASS: pdns
+      DB_NAME: pdns
+    depends_on:
+      - pgsql-nameserver
+    volumes:
+      - nameserver-persistence:/persistence
+    networks:
+      - nameserver
+      - persistence-nameserver
+  pgsql-app:
+    image: postgres:alpine
+    environment:
+      POSTGRES_PASSWORD: pdns
+      POSTGRES_USER: pdns
+      POSTGRES_DB: pdns
+    volumes:
+      - pgsql-app-persistence:/var/lib/postgresql/data
+    networks:
+      - persistence-app
+  pgsql-nameserver:
+    image: postgres:alpine
+    environment:
+      POSTGRES_PASSWORD: pdns
+      POSTGRES_USER: pdns
+      POSTGRES_DB: pdns
+    volumes:
+      - pgsql-nameserver-persistence:/var/lib/postgresql/data
+    networks:
+      - persistence-nameserver
+
+volumes:
+  app-uploads:
+  nameserver-persistence:
+  pgsql-app-persistence:
+  pgsql-nameserver-persistence:
+
+networks:
+  backend:
+  nameserver:
+  persistence-app:
+  persistence-nameserver:
