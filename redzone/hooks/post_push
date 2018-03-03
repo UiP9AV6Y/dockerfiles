@@ -1,0 +1,10 @@
+#!/bin/bash
+set -eu
+
+VERSION=0.0.3
+
+docker tag \
+  "${IMAGE_NAME}" \
+  "${DOCKER_REPO}:${VERSION}"
+docker push \
+  "${DOCKER_REPO}:${VERSION}"
