@@ -1,0 +1,45 @@
+---
+
+version: '2.3'
+
+services:
+  nameserver:
+    image: nsd:latest
+    build: ..
+    environment:
+      ACCESS_KEY_example: 'insecure hmac-md5 6KM6qiKfwfEpamEq72HQdA=='
+      LAZY_CONTROL_SETUP: 'true'
+    depends_on:
+      - zones
+    networks:
+      - resolver
+    volumes:
+      - nameserver-data:/var/db/nsd
+    volumes_from:
+      - config
+      - zones
+  config:
+    image: alpine:3.7
+    volumes:
+      - ./config:/etc/nsd/conf.d
+  zones:
+    image: uip9av6y/redzone:latest
+    working_dir: /etc/nsd/zones.d
+    volumes:
+      - ./zones/zones.yml:/etc/redzone/zones.yml:ro
+      - zones-data:/etc/nsd/zones.d
+  consumer:
+    image: nsd-example-consumer:latest
+    build: ./consumer
+    command: [ "dig", "@nameserver", "local.example.test", "+short" ]
+    networks:
+      - resolver
+    depends_on:
+      - nameserver
+
+volumes:
+  zones-data:
+  nameserver-data:
+
+networks:
+  resolver:

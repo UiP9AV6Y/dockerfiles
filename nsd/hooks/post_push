@@ -1,0 +1,14 @@
+#!/bin/bash
+set -eu
+
+VERSION=4.1.20
+VERSION_MINOR=${VERSION%.*}
+VERSION_MAJOR=${VERSION%%.*}
+
+for ALT_TAG in {$VERSION,$VERSION_MINOR,$VERSION_MAJOR}; do
+  docker tag \
+    "${IMAGE_NAME}" \
+    "${DOCKER_REPO}:${ALT_TAG}"
+  docker push \
+    "${DOCKER_REPO}:${ALT_TAG}"
+done

@@ -1,0 +1,42 @@
+---
+zones:
+  common:
+    hostmaster: hostmaster.example.test.
+    lifetimes:
+      refresh: 1H
+      retry: 15M
+      expire: 1W
+      negative: 1H
+      ttl: 1H
+    default: www
+    mailservers:
+      mx01:
+        priority: 10
+        machine: mx01
+    nameservers:
+      ns01: ns01
+    aliases:
+      mail: mx01
+    cnames:
+      gateway: fw01
+    wildcard: www
+  example.test:
+    arpa:
+      - name: '0.0.10.in-addr.arpa'
+        network: '10.0.0.0/8'
+    machines:
+      www:
+        ipv4: 10.0.0.50
+      ns01:
+        ipv4: 10.0.0.254
+      mx01:
+        ipv4: 10.0.0.20
+      fw01:
+        ipv4: 10.0.0.1
+      local:
+        ipv4: 10.0.0.32
+    records:
+      - name: '@'
+        type: TXT
+        ttl: 1W
+        data: '"example TXT record"'
