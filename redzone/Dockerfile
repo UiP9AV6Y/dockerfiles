@@ -2,13 +2,18 @@ FROM ruby:alpine
 
 ENV REDZONE_VERSION=0.0.3
 RUN set -xe; \
-  gem install \
+  apk add --no-cache \
+    inotify-tools \
+  && gem install \
     --no-document \
     --no-user-install \
     --version "${REDZONE_VERSION}" \
     redzone
-COPY ./generate.sh /usr/local/bin/generate-zonefiles
 
+COPY bin/ \
+  /usr/local/bin/
+
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 CMD [ "generate-zonefiles" ]
 
 ARG BUILD_DATE="1970-01-01T00:00:00Z"

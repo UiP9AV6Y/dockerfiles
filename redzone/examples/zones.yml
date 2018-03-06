@@ -1,0 +1,75 @@
+---
+
+zones:
+  common:
+    hostmaster: hostmaster.redzone.com.
+    lifetimes:
+      refresh: 1H
+      retry: 15M
+      expire: 1W
+      negative: 1H
+      ttl: 1H
+    default: platinum
+    mailservers:
+      mx0:
+        priority: 10
+        machine: gold
+      mx1:
+        priority: 20
+        machine: silver
+    nameservers:
+      ns0: gold
+      ns1: silver
+    aliases:
+      www: platinum
+    cnames:
+      db: gold
+      backup: silver
+      search: www.google.com
+    wildcard: platinum
+  redzone.com:
+    arpa:
+      - name: '32.12.in-addr.arpa'
+        network: '12.32.0.0/16'
+      - name: '9.8.7.6.4.3.2.1.1.0.0.2.ip6.arpa'
+        network: '2001:1234:6789::/48'
+    machines:
+      platinum:
+        ipv4: 12.32.56.1
+        ipv6: 2001:1234:6789::1
+      gold:
+        ipv4: 12.32.56.2
+        ipv6: 2001:1234:6789::2
+      silver:
+        ipv4: 12.32.56.3
+        ipv6: 2001:1234:6789::3
+    records:
+      - name: '@'
+        type: TXT
+        ttl: 1W
+        data: '"v=spf1 ip4:192.0.2.0/24 ip4:198.51.100.123 a -all"'
+      - name: dkim._domainkey
+        type: TXT
+        ttl: 12H
+        data: |
+          v=DKIM1; p=
+          MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDYArsr2BKbdhv9efugByf7LhaK
+          txFUt0ec5+1dWmcDv0WH0qZLFK711sibNN5LutvnaiuH+w3Kr8Ylbw8gq2j0UBok
+          FcMycUvOBd7nsYn/TUrOua3Nns+qKSJBy88IWSh2zHaGbjRYujyWSTjlPELJ0H+5
+          EV711qseo/omquskkwIDAQAB
+  qa.redzone.com:
+    arpa:
+      - name: '1.168.192.in-addr.arpa'
+        network: '192.168.1.0/24'
+      - name: '0.0.0.0.0.0.0.0.0.0.c.f.ip6.arpa'
+        network: 'fc00::/48'
+    machines:
+      platinum:
+        ipv4: 192.168.1.1
+        ipv6: fc00::1:1
+      gold:
+        ipv4: 192.168.1.2
+        ipv6: fc00::1:2
+      silver:
+        ipv4: 192.168.1.3
+        ipv6: fc00::1:3

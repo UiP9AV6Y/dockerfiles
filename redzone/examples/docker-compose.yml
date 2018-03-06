@@ -1,0 +1,20 @@
+---
+
+version: '2.3'
+
+services:
+  zone-compiler:
+    image: redzone:latest
+    build: ..
+    # use `watch-zonefiles` if inotify events are supported
+    command: poll-zonefiles
+    environment:
+      VERBOSE: 'true'
+      POLL_INTERVAL: 15
+      ZONES_DIR: /zones
+    volumes:
+      - ./zones.yml:/etc/redzone/zones.yml:ro
+      - compiled-zones:/zones
+
+volumes:
+  compiled-zones:

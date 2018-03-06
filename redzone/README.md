@@ -48,6 +48,43 @@ for more information about the format, consult the [upstream
 example][].
 (see **CONFIG_FILE**)
 
+## auto-compiling zones
+
+the default behaviour of the image is to act as a one-off
+command, compiling zone data on startup. the image also
+supports continuous compilation by either polling the
+input configuration for changes or reacting to changes
+to the file via kernel events.
+
+### `watch-zonefiles`
+
+internally the image uses `inotifywait` to listen for
+changes to the zone configuration file. this requires
+those events to be actually emitted inside of a
+docker container, which dependend on the host OS and
+docker volume plugin in use, might not be the case.
+
+additional environment variables are supported for this
+workflow
+
+| Variable | Description | Type | Default value |
+| -------- | ----------- | ---- | ------------- |
+| **VERBOSE** | log *all* inotify events in the config file directory | any | none |
+
+### `poll-zonefiles`
+
+an infinite loop will inspect the configuration file for
+changes and trigger a zone compilation.
+while the `watch-zonefiles` workflow will trigger on any
+modification event, `poll-zonefiles` will only act if the
+configuration file has actually changed in content (it
+compares the checksums internally)
+
+| Variable | Description | Type | Default value |
+| -------- | ----------- | ---- | ------------- |
+| **VERBOSE** | log when a scan is performed | any | none |
+| **POLL_INTERVAL** | time in seconds to wait between scans | integer | 60 |
+
 # image setup
 
 the image is based on the **ruby:alpine** image from
