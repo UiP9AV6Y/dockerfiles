@@ -4,7 +4,7 @@ set -eu
 BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 VCS_URL=$(git config --get remote.origin.url)
 VCS_REF=$(git rev-parse --short HEAD)
-VERSION=1.6.8-4
+VERSION=1.7.0-0
 
 docker build \
   --build-arg VERSION=$VERSION \
