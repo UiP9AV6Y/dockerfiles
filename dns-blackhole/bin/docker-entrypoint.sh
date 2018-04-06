@@ -24,7 +24,7 @@ dnsbh_easylist_fragment() {
 }
 
 dnsbh_disconnect_fragment() {
-  for DNSBH_DISCONNECT_CATEGORY in ${DNSBH_DISCONNECT_CATEGORIES}; do
+  for DNSBH_DISCONNECT_CATEGORY in ${DNSBH_DISCONNECT_CATEGORIES:-}; do
     DNSBH_DISCONNECT_CAT=$(echo "${DNSBH_DISCONNECT_CATEGORY}" | cut -d= -f2)
     echo "          - ${DNSBH_DISCONNECT_CAT}" >> "$1"
   done
