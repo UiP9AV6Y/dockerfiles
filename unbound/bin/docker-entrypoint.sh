@@ -84,6 +84,13 @@ control_setup() {
   fi
 }
 
+fix_ownership() {
+  # unbound writes key data during runtime, which requires
+  # write access. if the directory is mounted as volume,
+  # docker grants ownership to the root user.
+  chown unbound:unbound "${UNBOUND_HOME}/aux" || true
+}
+
 if test $# -gt 0; then
   case "$1" in
     -*)
@@ -124,5 +131,7 @@ fi
 if test -z "${DISABLE_CONTROL_SETUP+x}"; then
   control_setup "${UNBOUND_HOME}/ssl"
 fi
+
+fix_ownership
 
 exec unbound -d "$@"

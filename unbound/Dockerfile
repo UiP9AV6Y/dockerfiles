@@ -52,7 +52,7 @@ FROM alpine:3.7
 ENV UNBOUND_HOME=/etc/unbound
 RUN set -xe; \
   addgroup -S unbound \
-  && adduser -S -D -H -h ${UNBOUND_HOME} -s /sbin/nologin -G unbound unbound \
+  && adduser -S -D -H -h "${UNBOUND_HOME}" -s /sbin/nologin -G unbound unbound \
   && apk add --no-cache \
     dnssec-root \
     libsodium \
@@ -61,9 +61,12 @@ RUN set -xe; \
     openssl \
     expat \
   && mkdir -p \
-    ${UNBOUND_HOME}/conf.d \
-    ${UNBOUND_HOME}/ssl \
-    ${UNBOUND_HOME}/aux
+    "${UNBOUND_HOME}/conf.d" \
+    "${UNBOUND_HOME}/ssl" \
+    "${UNBOUND_HOME}/aux" \
+  && chown -R \
+    unbound:unbound \
+    "${UNBOUND_HOME}"
 
 WORKDIR ${UNBOUND_HOME}
 EXPOSE 53 53/udp 853 853/udp 8953
