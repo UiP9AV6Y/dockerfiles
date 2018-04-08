@@ -18,9 +18,9 @@ RUN set -xe; \
   && curl -sSLO http://unbound.net/downloads/unbound-${UNBOUND_VERSION}.tar.gz.asc \
   && key='EDFAA3F2CA4E6EB05681AF8E9F6F1C2D7E045F8D' \
   && export GNUPGHOME="$(mktemp -d)" \
-  && gpg --keyserver pgp.mit.edu --recv-keys "$key" \
-  || gpg --keyserver keyserver.pgp.com --recv-keys "$key" \
-  || gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key" \
+  && gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key" \
+  || gpg --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys "$key" \
+  || gpg --keyserver hkp://pgp.mit.edu:80 --recv-keys "$key" \
   && gpg --batch --verify unbound-${UNBOUND_VERSION}.tar.gz.asc unbound-${UNBOUND_VERSION}.tar.gz \
   && rm -rf "$GNUPGHOME" unbound-${UNBOUND_VERSION}.tar.gz.asc \
   && tar -xzf unbound-${UNBOUND_VERSION}.tar.gz \

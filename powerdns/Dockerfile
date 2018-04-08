@@ -28,10 +28,9 @@ RUN set -xe; \
   162890D0689DD12DD33E46961C5EE990D2E71575 \
   B76CD4671C0968BAA87DE61C5E50715BF2FFE1A7' \
 && export GNUPGHOME="$(mktemp -d)" \
-&& gpg --keyserver ha.pool.sks-keyservers.net --recv-keys $keys \
-|| gpg --keyserver keyserver.ubuntu.com --recv-keys $keys \
-|| gpg --keyserver keyserver.pgp.com --recv-keys $keys \
-|| gpg --keyserver pgp.mit.edu --recv-keys $keys \
+&& gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys $keys \
+|| gpg --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys $keys \
+|| gpg --keyserver hkp://pgp.mit.edu:80 --recv-keys $keys \
 && gpg --batch --verify pdns-${PDNS_VERSION}.tar.bz2.asc pdns-${PDNS_VERSION}.tar.bz2 \
 && rm -rf "$GNUPGHOME" pdns-${PDNS_VERSION}.tar.bz2.asc \
 && tar -xjf pdns-${PDNS_VERSION}.tar.bz2 \
