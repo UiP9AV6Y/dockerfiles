@@ -2,8 +2,8 @@
 PROJECT_ROOT := $(dir $(lastword $(MAKEFILE_LIST)))
 
 # run `make version-sync` on changes
-VERSION := 4.1.20
-REVISION := 1
+VERSION := 4.1.21
+REVISION := 0
 
 
 .PHONY: default

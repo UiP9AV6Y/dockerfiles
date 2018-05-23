@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eu
 
-VERSION=4.1.20
+VERSION=4.1.21
 VERSION_MINOR=${VERSION%.*}
 VERSION_MAJOR=${VERSION%%.*}
 
