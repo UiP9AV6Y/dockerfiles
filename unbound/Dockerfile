@@ -1,6 +1,6 @@
 FROM alpine:3.7 AS builder
 
-ENV UNBOUND_VERSION=1.7.0
+ENV UNBOUND_VERSION=1.7.1
 WORKDIR /src
 RUN set -xe; \
   apk add --no-cache \
