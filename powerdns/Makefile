@@ -2,7 +2,7 @@
 PROJECT_ROOT := $(dir $(lastword $(MAKEFILE_LIST)))
 
 # run `make version-sync` on changes
-VERSION := 4.1.4
+VERSION := 4.1.5
 REVISION := 0
 
 
