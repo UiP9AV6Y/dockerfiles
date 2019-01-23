@@ -92,6 +92,7 @@ powerdns_admin_db_config() {
 SQLALCHEMY_DATABASE_URI = '${db_uri}'
 SQLALCHEMY_MIGRATE_REPO = '${APP_HOME}/migrations/powerdns-admin'
 SQLALCHEMY_TRACK_MODIFICATIONS = True
+SQLALCHEMY_POOL_RECYCLE = 600
 EOF
 }
 
