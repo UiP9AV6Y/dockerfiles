@@ -2,7 +2,7 @@ FROM alpine:3.7 AS builder
 
 ARG FLAVOUR
 
-ENV PDNS_VERSION=4.1.7
+ENV PDNS_VERSION=4.1.8
 WORKDIR /src
 RUN set -xe; \
   case "${FLAVOUR}" in \
