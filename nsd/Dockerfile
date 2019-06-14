@@ -1,6 +1,6 @@
 FROM alpine:3.7 AS builder
 
-ENV NSD_VERSION=4.1.26
+ENV NSD_VERSION=4.2.0
 WORKDIR /src
 RUN set -xe; \
   apk add --no-cache \
