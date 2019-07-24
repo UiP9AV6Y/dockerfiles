@@ -62,6 +62,8 @@ RUN set -xe; \
     expat \
   && mkdir -p \
     "${UNBOUND_HOME}/conf.d" \
+    "${UNBOUND_HOME}/server-conf.d" \
+    "${UNBOUND_HOME}/remote-conf.d" \
     "${UNBOUND_HOME}/ssl" \
     "${UNBOUND_HOME}/aux" \
   && chown -R \
@@ -75,12 +77,14 @@ COPY --from=builder /app/usr/sbin/ \
   /usr/sbin/
 COPY --from=builder /app/usr/lib/ \
   /usr/lib/
-# core essentials which harmonize with the Dockerfile settings
+# minimal config which merely includes other files.
+# can be mounted with a custom file in RO mode, as
+# it is not modified.
 COPY unbound.conf \
   ${UNBOUND_HOME}/
 # opiniated defaults
-COPY server-config/ \
-  ${UNBOUND_HOME}/server-conf.d/
+COPY include.d/ \
+  ${UNBOUND_HOME}/include.d/
 COPY bin/ \
   /usr/local/bin/
 
@@ -88,6 +92,7 @@ VOLUME [ \
   "${UNBOUND_HOME}/aux", \
   "${UNBOUND_HOME}/ssl", \
   "${UNBOUND_HOME}/conf.d", \
+  "${UNBOUND_HOME}/remote-conf.d", \
   "${UNBOUND_HOME}/server-conf.d" \
 ]
 HEALTHCHECK --interval=1m --timeout=3s --start-period=10s \

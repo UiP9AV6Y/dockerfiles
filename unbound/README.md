@@ -34,13 +34,50 @@ included in the toplevel hierarchy of the unbound main config.
 (i.e.: server related settings must be parented under a
 *server* section)
 
-if the opiniated settings are not to your liking, you can
-either mount an empty directory over
-**/etc/unbound/server-conf.d**, or provide your own main
-configuration file (**/etc/unbound/unbound.conf**)
-
 the *examples/* directory contains a simple deployment setup
 using docker-compose.
+
+## custom image configuration
+
+it is possible to embed your Unbound configuration
+(**/etc/unbound/unbound.conf**) in a  custom image.
+
+Here is an example Dockerfile to achieve this:
+
+```Dockerfile
+FROM unbound:latest
+COPY unbound.conf /etc/unbound/unbound.conf
+```
+
+## volumes
+
+the container exposes several volumes:
+
+* */etc/unbound/aux*
+
+this directory hosts the ICANN certificate bundle as well
+as the root zone hints.
+
+* */etc/unbound/ssl*
+
+this directory contains the SSL certificates and keys
+for TLS communication for both the DNS resolver as well
+as the remote control interface.
+
+* */etc/unbound/conf.d*
+
+files with the *.conf* file extension are included in
+the unbound configuration.
+
+* */etc/unbound/remote-conf.d*
+
+files with the *.conf* file extension are included in
+the unbound configuration under the **remote-control** clause.
+
+* */etc/unbound/server-conf.d*
+
+files with the *.conf* file extension are included in
+the unbound configuration under the **server** clause.
 
 ## environment variables
 
