@@ -10,6 +10,10 @@ services:
       ENABLE_CATCH_ALL: 'true'
       UPSTREAM_PRIMARY: 9.9.9.9
       LAZY_CONTROL_SETUP: 'true'
+      UNBOUND_REMOTE_CONTROL_USE_CERT: 'no'
+      UNBOUND_SERVER_DOMAIN_INSECURE_01: 'insecure.com'
+      UNBOUND_SERVER_DOMAIN_INSECURE_02: 'insecure.org'
+      UNBOUND_SERVER_DOMAIN_INSECURE_03: 'insecure.net'
     networks:
       - resolver
     volumes_from:

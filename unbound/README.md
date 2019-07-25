@@ -85,6 +85,30 @@ environment variables can be used to control the behaviour of
 some commonly tweaked settings without the need to mount a
 configuration volume.
 
+### automated conversion
+
+configuration settings for the **server**
+and **remote-control** clause, as well as settings in the
+global scope, can be generated from environment variables.
+
+the format follows the following pattern:
+
+> UNBOUND_ + clause + setting + number (optional)
+
+the number is optional and will be stripped from the settings
+key. it allows settings keys to be defined multiple times.
+
+examples:
+
+the environment variable *UNBOUND_REMOTE_CONTROL_USE_CERT*
+would end up as *control-use-cert* key under the
+**remote-control** clause.
+
+the environment variable *UNBOUND_SERVER_DOMAIN_INSECURE_01*
+would end up as *domain-insecure* key under the **server**
+clause. defining *UNBOUND_SERVER_DOMAIN_INSECURE_02* would
+add another key with the same name.
+
 ### catch-all forwarder
 
 if the environment variable *ENABLE_CATCH_ALL* is defined,

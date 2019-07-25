@@ -42,6 +42,29 @@ so-reuseport: yes
 EOF
 }
 
+convert_env() {
+  local env_prefix
+  local trim_length
+  local conf_key
+  local conf_value
+
+  env_prefix="UNBOUND_${1}_"
+  trim_length=${#env_prefix}
+
+  for CONF_ENV in $(env | grep "${env_prefix}"); do
+    conf_value=${CONF_ENV#*=}
+    conf_key=$(echo ${CONF_ENV%%=*} \
+      | sed -r \
+        -e "s/.{${trim_length}}//" \
+        -e 's/[\-_0-9]+$//' \
+        -e 's/_/-/g' \
+      | tr '[:upper:]' '[:lower:]' \
+    )
+
+    echo "${conf_key}: ${conf_value}"
+  done
+}
+
 icann_bundle() {
   wget -q \
     -O "${1}" \
@@ -102,6 +125,10 @@ if test $# -gt 0; then
       ;;
   esac
 fi
+
+convert_env GLOBAL > "${GLOBAL_INCLUDE_D}/90_environment.conf"
+convert_env SERVER > "${SERVER_INCLUDE_D}/90_environment.conf"
+convert_env REMOTE > "${REMOTE_INCLUDE_D}/90_environment.conf"
 
 if test -n "${ENABLE_CATCH_ALL+x}"; then
   catch_all_forwarder > "${GLOBAL_INCLUDE_D}/catch_all.conf"
