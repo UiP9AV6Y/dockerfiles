@@ -51,8 +51,11 @@ RUN set -xe; \
   --enable-static \
   --disable-shared \
   --enable-tools \
-  --enable-libsodium \
   --enable-experimental-pkcs11 \
+  --disable-dependency-tracking \
+  --disable-silent-rules \
+  --disable-lua-records \
+  --enable-reproducible \
   'CC=gcc' \
   "LDFLAGS=${LDFLAGS}" \
   "CFLAGS=${CFLAGS}" \
