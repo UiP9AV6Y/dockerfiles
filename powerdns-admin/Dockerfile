@@ -37,7 +37,7 @@ RUN set -xe; \
     $build_deps \
   && mkdir -p \
     "${APP_HOME}/migrations" \
-    "${APP_HOME}/uploads" \
+    "${APP_HOME}/uploads/avatar" \
     "${APP_HOME}/saml" \
   && curl -sSL "https://github.com/thomasDOTde/PowerDNS-Admin/archive/${APP_VERSION}.tar.gz" \
   | tar -xzf - --strip-components 1 \
