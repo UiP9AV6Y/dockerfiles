@@ -1,4 +1,4 @@
-FROM alpine:3.7 AS builder
+FROM alpine:3.10 AS builder
 
 ENV NSD_VERSION=4.2.2
 WORKDIR /src
@@ -39,7 +39,7 @@ RUN set -xe; \
 	&& make \
   && make DESTDIR="/app" install
 
-FROM alpine:3.7
+FROM alpine:3.10
 
 ENV NSD_HOME=/etc/nsd
 RUN set -xe; \

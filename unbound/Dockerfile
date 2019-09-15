@@ -1,4 +1,4 @@
-FROM alpine:3.7 AS builder
+FROM alpine:3.10 AS builder
 
 ENV UNBOUND_VERSION=1.9.3
 WORKDIR /src
@@ -47,7 +47,7 @@ RUN set -xe; \
 	&& make \
   && make DESTDIR="/app" install
 
-FROM alpine:3.7
+FROM alpine:3.10
 
 ENV UNBOUND_HOME=/etc/unbound
 RUN set -xe; \

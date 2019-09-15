@@ -1,4 +1,4 @@
-FROM alpine:3.7 AS builder
+FROM alpine:3.10 AS builder
 
 ARG FLAVOUR
 
@@ -64,7 +64,7 @@ RUN set -xe; \
 && make -j$(nproc) \
 && make DESTDIR="/app" install-strip
 
-FROM alpine:3.7
+FROM alpine:3.10
 
 ARG FLAVOUR
 
