@@ -19,6 +19,16 @@ args_to_array() {
   echo "[ ${a} ]"
 }
 
+setup_environment() {
+  local config_path
+
+  config_path=$(dirname "$POWERDNS_ADMIN_CONF")
+
+  # config.py might not be located in APP_HOME (see #5)
+  # PYTHONPATH might be empty
+  export "PYTHONPATH=${PYTHONPATH+${PYTHONPATH}:}${config_path}"
+}
+
 setup_persistence() {
   export WAITFOR_DB=30
 
@@ -266,6 +276,7 @@ else
   echo 'SAML_ENABLED = False' >> "${POWERDNS_ADMIN_CONF}"
 fi
 
+setup_environment
 setup_persistence
 
 exec uwsgi \
