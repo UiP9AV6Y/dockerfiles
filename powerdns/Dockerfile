@@ -73,7 +73,7 @@ RUN set -xe; \
   addgroup -S pdns \
   && adduser -S -D -H -h ${PDNS_HOME} -s /sbin/nologin -G pdns pdns \
   && case "${FLAVOUR}" in \
-    mysql) run_deps='mariadb-client mariadb-client-libs' ;; \
+    mysql) run_deps='mariadb-client mariadb-connector-c' ;; \
     pgsql) run_deps='postgresql-client postgresql-libs' ;; \
     sqlite3) run_deps='sqlite sqlite-libs' ;; \
     *) echo "unsupported flavour ${FLAVOUR}"; exit 1 ;; \
