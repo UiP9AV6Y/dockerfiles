@@ -11,7 +11,7 @@ RUN set -xe; \
   && case "${FLAVOUR}" in \
     odbc) build_deps='unixodbc-dev'; run_deps='unixodbc'; pip_deps='pyodbc' ;; \
     mssql) build_deps='freetds-dev'; run_deps='freetds'; pip_deps='pymssql' ;; \
-    mysql) build_deps='mariadb-dev'; run_deps='mariadb-client-libs'; pip_deps='MySQL-python' ;; \
+    mysql) build_deps='mariadb-dev'; run_deps='mariadb-connector-c'; pip_deps='mysqlclient' ;; \
     pgsql) build_deps='postgresql-dev'; run_deps='libpq'; pip_deps='psycopg2' ;; \
     sqlite3) build_deps=''; run_deps=''; pip_deps='noop' ;; \
     *) echo "unsupported flavour ${FLAVOUR}"; exit 1 ;; \
