@@ -108,7 +108,7 @@ EOF
 
 powerdns_admin_dns_config() {
   local dns_api=${POWERDNS_ADMIN_API_URL:-http://powerdns:8081/}
-  local dns_key=${POWERDNS_ADMIN_API_KEY}
+  local dns_key=${POWERDNS_ADMIN_API_KEY:-secret}
 
 cat << EOF >> "$1"
 PDNS_STATS_URL = '${dns_api}'
