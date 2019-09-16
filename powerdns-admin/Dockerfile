@@ -44,8 +44,10 @@ RUN set -xe; \
   && find . -type f -iname '*.psd' -delete \
   && find . -type d -name examples -exec rm -rf {} + \
   && pip2 install \
+    --no-cache-dir \
     -r requirements.txt \
   && pip2 install \
+    --no-cache-dir \
     # missing in requirements.txt; fix not released yet
     pytz \
     pyOpenSSL \
