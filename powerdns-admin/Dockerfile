@@ -10,7 +10,7 @@ RUN set -xe; \
   && adduser -S -D -H -h ${APP_HOME} -s /sbin/nologin -G www-data www-data \
   && case "${FLAVOUR}" in \
     odbc) build_deps='unixodbc-dev'; run_deps='unixodbc'; pip_deps='pyodbc' ;; \
-    mssql) build_deps='freetds-dev'; run_deps='freetds'; pip_deps='pymssql' ;; \
+    mssql) build_deps='freetds-dev cython2'; run_deps='freetds'; pip_deps='pymssql' ;; \
     mysql) build_deps='mariadb-dev'; run_deps='mariadb-connector-c'; pip_deps='mysqlclient' ;; \
     pgsql) build_deps='postgresql-dev'; run_deps='libpq'; pip_deps='psycopg2' ;; \
     sqlite3) build_deps=''; run_deps=''; pip_deps='noop' ;; \
