@@ -2,7 +2,7 @@ FROM alpine:3.10 AS builder
 
 ARG FLAVOUR
 
-ENV PDNS_VERSION=4.2.0
+ARG PDNS_VERSION=4.2.0
 WORKDIR /src
 RUN set -xe; \
   case "${FLAVOUR}" in \
@@ -68,6 +68,8 @@ FROM alpine:3.10
 
 ARG FLAVOUR
 
+ARG PDNS_VERSION=4.2.0
+ENV PDNS_VERSION=${PDNS_VERSION}
 ENV PDNS_HOME=/etc/pdns
 RUN set -xe; \
   addgroup -S pdns \
@@ -114,7 +116,7 @@ ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 CMD [ "pdns_server" ]
 
 ARG BUILD_DATE="1970-01-01T00:00:00Z"
-ARG VERSION="1.0.0"
+ARG REVISION="0"
 ARG VCS_URL="http://localhost/"
 ARG VCS_REF="master"
 LABEL org.opencontainers.image.created=$BUILD_DATE \
@@ -124,6 +126,6 @@ LABEL org.opencontainers.image.created=$BUILD_DATE \
     org.opencontainers.image.source=$VCS_URL \
     org.opencontainers.image.revision=$VCS_REF \
     org.opencontainers.image.vendor="PowerDNS.COM BV" \
-    org.opencontainers.image.version=$VERSION \
+    org.opencontainers.image.version="${PDNS_VERSION}-${REVISION}" \
     com.microscaling.docker.dockerfile="/powerdns/Dockerfile" \
     org.opencontainers.image.licenses="GPL-2.0"

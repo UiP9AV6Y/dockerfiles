@@ -1,11 +1,6 @@
 
 PROJECT_ROOT := $(dir $(lastword $(MAKEFILE_LIST)))
 
-# run `make version-sync` on changes
-VERSION := 0.0.3
-REVISION := 1
-
-
 .PHONY: default
 default: all
 
@@ -20,17 +15,5 @@ publish: docker-cloud-release
 
 .PHONY: clean
 clean: docker-cloud-clean
-
-.PHONY: version-sync
-version-sync: $(PROJECT_ROOT)/hooks/build $(PROJECT_ROOT)/hooks/post_push $(PROJECT_ROOT)/Dockerfile
-	@sed -i \
-		-re 's|^VERSION=.*|VERSION=$(VERSION)-$(REVISION)|' \
-		$(PROJECT_ROOT)/hooks/build
-	@sed -i \
-		-re 's|^VERSION=.*|VERSION=$(VERSION)|' \
-		$(PROJECT_ROOT)/hooks/post_push
-	@sed -i \
-		-re 's|^(ENV REDZONE_VERSION)=.+|\1=$(VERSION)|' \
-		$(PROJECT_ROOT)/Dockerfile
 
 include $(PROJECT_ROOT)/../.project/common.mk

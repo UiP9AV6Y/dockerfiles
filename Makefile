@@ -27,5 +27,7 @@ clean: $(IMAGES:=/clean)
 		$(PROJECT_ROOT)/$@
 	@sed -i \
 		-e "s|@PROJECT@|$@|g" \
-		$(PROJECT_ROOT)/$@/Dockerfile
+		-e "s|@PROJECT_CASE@|$(shell echo $@ | tr [:lower:] [:upper:] | sed -e 's|-|_|g')|g" \
+		$(PROJECT_ROOT)/$@/Dockerfile \
+		$(PROJECT_ROOT)/$@/hooks/*
 	@$(info $(PROJECT_ROOT)/$@ created)

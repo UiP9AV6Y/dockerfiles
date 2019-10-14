@@ -1,7 +1,8 @@
 #!/bin/bash
 set -eu
 
-VERSION=1.9.4
+. "$(readlink -m ${BASH_SOURCE[@]}/../../VERSION)"
+
 VERSION_MINOR=${VERSION%.*}
 VERSION_MAJOR=${VERSION%%.*}
 

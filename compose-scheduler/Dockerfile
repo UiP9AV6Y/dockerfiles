@@ -1,5 +1,7 @@
-FROM docker/compose:1.19.0
+ARG COMPOSE_VERSION=1.19.0
+FROM docker/compose:$COMPOSE_VERSION
 
+ARG COMPOSE_VERSION=1.19.0
 ENV SCHEDULER_HOME=/etc/crontabs
 RUN set -xe; \
     rm -f ${SCHEDULER_HOME}/*
@@ -16,7 +18,7 @@ HEALTHCHECK --interval=5m --timeout=3s --start-period=70s \
 CMD ["crond"]
 
 ARG BUILD_DATE="1970-01-01T00:00:00Z"
-ARG VERSION="1.0.0"
+ARG REVISION="0"
 ARG VCS_URL="http://localhost/"
 ARG VCS_REF="master"
 LABEL org.opencontainers.image.created=$BUILD_DATE \
@@ -26,6 +28,6 @@ LABEL org.opencontainers.image.created=$BUILD_DATE \
     org.opencontainers.image.source=$VCS_URL \
     org.opencontainers.image.revision=$VCS_REF \
     org.opencontainers.image.vendor="Docker Inc." \
-    org.opencontainers.image.version=$VERSION \
+    org.opencontainers.image.version="${COMPOSE_VERSION}-${REVISION}" \
     com.microscaling.docker.dockerfile="/compose-scheduler/Dockerfile" \
     org.opencontainers.image.licenses="Apache-2.0"

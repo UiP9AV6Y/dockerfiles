@@ -2,7 +2,8 @@ FROM alpine:3.10
 
 ARG FLAVOUR
 
-ENV APP_VERSION=2018.03.28.1
+ARG APP_VERSION=2018.03.28.1
+ENV APP_VERSION=${APP_VERSION}
 ENV APP_HOME=/app
 WORKDIR ${APP_HOME}
 RUN set -xe; \
@@ -75,7 +76,7 @@ CMD [ "uwsgi", "--master", "--processes=4", "--threads=2" ]
 
 
 ARG BUILD_DATE="1970-01-01T00:00:00Z"
-ARG VERSION="1.0.0"
+ARG REVISION="0"
 ARG VCS_URL="http://localhost/"
 ARG VCS_REF="master"
 LABEL org.opencontainers.image.created=$BUILD_DATE \
@@ -85,6 +86,6 @@ LABEL org.opencontainers.image.created=$BUILD_DATE \
     org.opencontainers.image.source=$VCS_URL \
     org.opencontainers.image.revision=$VCS_REF \
     org.opencontainers.image.vendor="Khanh Ngo" \
-    org.opencontainers.image.version=$VERSION \
+    org.opencontainers.image.version="${APP_VERSION}-${REVISION}" \
     com.microscaling.docker.dockerfile="/powerdns-admin/Dockerfile" \
     org.opencontainers.image.licenses="MIT"

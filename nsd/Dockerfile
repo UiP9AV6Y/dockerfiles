@@ -1,6 +1,6 @@
 FROM alpine:3.10 AS builder
 
-ENV NSD_VERSION=4.2.2
+ARG NSD_VERSION=4.2.2
 WORKDIR /src
 RUN set -xe; \
   apk add --no-cache \
@@ -41,6 +41,8 @@ RUN set -xe; \
 
 FROM alpine:3.10
 
+ARG NSD_VERSION=4.2.2
+ENV NSD_VERSION=${NSD_VERSION}
 ENV NSD_HOME=/etc/nsd
 RUN set -xe; \
   addgroup -S nsd \
@@ -83,7 +85,7 @@ ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 CMD [ "nsd", "-c", "/etc/nsd/nsd.conf" ]
 
 ARG BUILD_DATE="1970-01-01T00:00:00Z"
-ARG VERSION="1.0.0"
+ARG REVISION="0"
 ARG VCS_URL="http://localhost/"
 ARG VCS_REF="master"
 LABEL org.opencontainers.image.created=$BUILD_DATE \
@@ -93,6 +95,6 @@ LABEL org.opencontainers.image.created=$BUILD_DATE \
     org.opencontainers.image.source=$VCS_URL \
     org.opencontainers.image.revision=$VCS_REF \
     org.opencontainers.image.vendor="NLnet Labs" \
-    org.opencontainers.image.version=$VERSION \
+    org.opencontainers.image.version="${NSD_VERSION}-${REVISION}" \
     com.microscaling.docker.dockerfile="/nsd/Dockerfile" \
     org.opencontainers.image.licenses="BSD"
