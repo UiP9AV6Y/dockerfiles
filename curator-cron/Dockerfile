@@ -17,7 +17,7 @@ COPY bin/ \
 
 USER daemon
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
-CMD ["crond", "--no-auto", "--include", "$CURATOR_CRON_D", "--allow-unprivileged"]
+CMD ["crond", "--no-auto", "--allow-unprivileged"]
 
 ARG BUILD_DATE="1970-01-01T00:00:00Z"
 ARG VERSION="1.0.0"

@@ -127,4 +127,4 @@ fi
 
 curator_jobs $(shared_curator_args) > "${CURATOR_CRON_D}/${CURATOR_CRON_USER}"
 
-exec crond --default-user "${CURATOR_CRON_USER}" "$@"
+exec crond --include "${CURATOR_CRON_D}" --default-user "${CURATOR_CRON_USER}" "$@"
