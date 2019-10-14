@@ -1,0 +1,13 @@
+---
+
+version: '2.4'
+
+services:
+  scheduler:
+    image: curator-cron:latest
+    build: ..
+    environment:
+      CURATOR_CRON_HOST: 'elasticsearch.example.test'
+      CURATOR_CRON_SCHEDULE_WEEKLY_INDICES: "30 12 * * 1|show_indices|--verbose --filter_list '[{\"filtertype\":\"none\"}]'"
+      CURATOR_CRON_SCHEDULE_WEEKLY_SNAPSHOTS: "30 12 * * 1|show_snapshots"
+      CURATOR_CRON_SCHEDULE_DELETE_DAILY: "0 0 * * *|delete_indices|--filter_list '[{\"filtertype\":\"age\",\"source\":\"creation_date\",\"direction\":\"older\",\"unit\":\"days\",\"unit_count\":13},{\"filtertype\":\"pattern\",\"kind\":\"prefix\",\"value\":\"logstash\"}]'"
