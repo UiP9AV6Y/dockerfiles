@@ -286,6 +286,6 @@ exec uwsgi \
   --manage-script-name \
   --mount ${UWSGI_BASE_URI:-/}=run:app \
   --protocol "${UWSGI_PROTOCOL:-http}" \
-  --socket :9393 \
-  --stats :9191 \
+  --socket "[::]:9393" \
+  --stats "[::]:9191" \
   "$@"
