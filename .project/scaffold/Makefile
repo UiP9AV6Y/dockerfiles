@@ -1,11 +1,6 @@
 
 PROJECT_ROOT := $(dir $(lastword $(MAKEFILE_LIST)))
 
-# run `make version-sync` on changes
-VERSION := 1.0.0
-REVISION := 0
-
-
 .PHONY: default
 default: all
 
