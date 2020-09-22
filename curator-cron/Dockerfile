@@ -1,6 +1,6 @@
 FROM python:3-alpine3.10
 
-ARG CROND_RELEASE=0.6.1
+ARG CROND_RELEASE=20.7.0
 ENV CURATOR_CRON_D=/data
 ADD "https://github.com/webdevops/go-crond/releases/download/${CROND_RELEASE}/go-crond-64-linux" /usr/local/bin/crond
 RUN set -xe; \
@@ -18,7 +18,7 @@ COPY bin/ \
 
 USER daemon
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
-CMD ["crond", "--no-auto", "--allow-unprivileged"]
+CMD ["crond", "--allow-unprivileged"]
 
 ARG BUILD_DATE="1970-01-01T00:00:00Z"
 ARG REVISION="0"
