@@ -19,6 +19,7 @@ RUN set -xe; \
     libsodium-dev \
     libressl-dev \
     boost-dev \
+    luajit-dev \
     p11-kit-dev \
     ${build_deps} \
 && curl -sSLO https://downloads.powerdns.com/releases/pdns-${PDNS_VERSION}.tar.bz2 \
