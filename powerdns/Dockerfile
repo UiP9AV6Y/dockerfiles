@@ -87,6 +87,7 @@ RUN set -xe; \
     libressl \
     libstdc++ \
     libgcc \
+    luajit \
     p11-kit \
     ${run_deps} \
   && mkdir -p \
